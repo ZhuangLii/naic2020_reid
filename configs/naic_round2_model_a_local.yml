@@ -1,0 +1,81 @@
+MODEL:
+  PRETRAIN_CHOICE: 'imagenet'
+  PRETRAIN_PATH: '' # './ckpt/resnet101_ibn_a.pth.tar'
+  METRIC_LOSS_TYPE: 'triplet_center'
+  IF_LABELSMOOTH: 'on'
+  IF_WITH_CENTER: 'yes'
+  NAME: 'resnet50_ibn_a'
+  FEAT_SIZE: 2048
+  DEVICE_ID: ('0')
+  ID_LOSS_TYPE: 'arcface'
+  ID_LOSS_WEIGHT: 0.1
+  TRIPLET_LOSS_WEIGHT: 0.9
+  WEIGHTED_TRIPLET: True
+  NO_MARGIN: True
+  LAYERN0RM: False
+
+INPUT:
+  SIZE_TRAIN: [256, 128] #[384, 192] #[256, 128]  #
+  SIZE_TEST: [256, 128]
+  PIXEL_MEAN: [0.485, 0.456, 0.406] # imagenet [0.485, 0.456, 0.406] naic [0.327, 0.299, 0.277]
+  PIXEL_STD: [0.229, 0.224, 0.225] # imagenet [0.229, 0.224, 0.225] naic [0.259, 0.224, 0.256]
+  PROB: 0.5 # random horizontal flip
+  RE_PROB: 0.5 # random erasing
+  PADDING: 10
+  RANDOM_PATCH_PROB: 0.0
+
+DATASETS:
+  NAMES: ('naic')
+  # ROOT_DIR: ('../data/naic_2020_B')
+  # ROOT_DIR: ('../data/naic2020_evaldataset')
+  # ROOT_DIR: '../data/19_20_train_20_test'
+  ROOT_DIR: ('../data/tmp_data')
+  TEST_DIR: 'test' 
+  HARD_AUG: 'auto'
+  EXCHANEL: False
+  MIXUP: False
+
+DATALOADER:
+  SAMPLER: 'softmax_triplet'
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  
+
+SOLVER:
+  OPTIMIZER_NAME: 'Ranger'
+  MAX_EPOCHS: 10
+  BASE_LR: 0.08 # 0.006
+  IMS_PER_BATCH: 16
+  STEPS: [25, 40, 100]
+  GAMMA: 0.1
+  WARMUP_FACTOR: 0.01
+  WARMUP_EPOCHS: 10
+  WARMUP_METHOD: 'linear'
+  LARGE_FC_LR: False
+  CHECKPOINT_PERIOD: 1
+  LOG_PERIOD: 50
+  EVAL_PERIOD: 10000
+  COSINE_MARGIN: 0.4 #
+  COSINE_SCALE: 30 # 
+  CENTER_LOSS_WEIGHT: 0.0003
+  FP16: False
+  GRADCENTER: False
+  TYPE: 'exp'
+  SWA: True
+  SWA_START: [5,10]
+  GRADUAL_UNLOCK: False
+
+TEST:
+  IMS_PER_BATCH: 256
+  RE_RANKING: False
+  RE_RANKING_PARAMETER_GREEN: [9, 3, 0.7821] #[9, 3, 0.7821]
+  RE_RANKING_PARAMETER_NORMAL: [17, 6, 0.7904] #[17, 6, 0.7904]
+  WEIGHT: '/mnt/nfs-internstorage/user/zjf/NAIC2020/19_20__curricularface_m05s40/1229-a-1/resnet101_ibn_a_50.pth' # '/mnt/nfs-internstorage/user/zjf/NAIC2020/new_val_a_auto_curricularface_m05s40/1229-a-1/resnet101_ibn_a_30.pth'
+  NECK_FEAT: 'before'
+  FEAT_NORM: 'yes'
+  FLIP_FEATS: 'on'
+OUTPUT_DIR: "../log/19_20_a_auto/"
+TBOUTPUT_DIR: "../tboard/19_20_a_auto/"
+SAVE_FLAG: '19_20_auto_a_ori_hard'
+EVAL_START_EPOCH: 1
+EVAL_GT_PATH: '/home/zjf/naic_code/data/tmp_data/test/g_q.txt'

@@ -1,0 +1,77 @@
+MODEL:
+  PRETRAIN_CHOICE: 'imagenet' # imagenet finetune
+  PRETRAIN_PATH: '' #'./ckpt/resnet101_val_0.51.pth' # './ckpt/resnet101_ibn_a.pth.tar'
+  METRIC_LOSS_TYPE: 'triplet' #'triplet,crossentropy,triplet_center'
+  IF_LABELSMOOTH: 'on'
+  IF_WITH_CENTER: 'yes'
+  NAME: 'resnet50_ibn_a' # resnet101_ibn_a
+  FEAT_SIZE: 2048
+  DEVICE_ID: ('0,1,2,3,4,5,6,7')
+  ID_LOSS_TYPE: 'arcface' #'arcface, curricularface'
+  ID_LOSS_WEIGHT: 0.1
+  TRIPLET_LOSS_WEIGHT: 0.9
+  WEIGHTED_TRIPLET: True # True False
+  NO_MARGIN: True
+  LAYERN0RM: False
+  POOLING_METHOD: 'avg'
+
+INPUT:
+  SIZE_TRAIN: [256, 128] #[256, 128]
+  SIZE_TEST: [256, 128] #[256, 128]
+  PIXEL_MEAN: [0.485, 0.456, 0.406] # imagenet [0.485, 0.456, 0.406] naic [0.327, 0.299, 0.277]
+  PIXEL_STD: [0.229, 0.224, 0.225] # imagenet [0.229, 0.224, 0.225] naic [0.259, 0.224, 0.256]
+  PROB: 0.5 # random horizontal flip
+  RE_PROB: 0.5 # random erasing
+  PADDING: 10
+  RANDOM_PATCH_PROB: 0.0 
+
+DATASETS:
+  NAMES: ('naic')
+  ROOT_DIR: ('./data')
+  HARD_AUG: 'auto'
+  EXCHANEL: False
+  MIXUP: False
+
+DATALOADER:
+  SAMPLER: 'softmax_triplet' #'softmax_triplet'
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+
+SOLVER:
+  OPTIMIZER_NAME: 'Ranger' # Ranger
+  MAX_EPOCHS: 50 # 50
+  BASE_LR: 0.08 # 0.006
+  IMS_PER_BATCH: 512 # 512
+  STEPS: [25, 40] #[25, 40, 55, 70] 
+  GAMMA: 0.1
+  WARMUP_FACTOR: 0.01
+  WARMUP_EPOCHS: 10
+  WARMUP_METHOD: 'linear'
+  LARGE_FC_LR: False
+  CHECKPOINT_PERIOD: 1
+  LOG_PERIOD: 50 
+  EVAL_PERIOD: 10000
+  COSINE_MARGIN: 0.4  # 0.4
+  COSINE_SCALE: 30  # 30
+  CENTER_LOSS_WEIGHT: 0.0003 #0.0003
+  FP16: False
+  GRADCENTER: False
+  TYPE: 'exp' # warmup, multistep, cosineann, exp
+  SWA: False
+  SWA_START: [30]
+  T_MAX: 5
+  GRADUAL_UNLOCK: True
+TEST:
+  IMS_PER_BATCH: 512 # 512
+  RE_RANKING: False
+  RE_RANKING_PARAMETER_GREEN: [20, 6, 0.3]
+  RE_RANKING_PARAMETER_NORMAL: [20, 6, 0.3]
+  WEIGHT: './log/1229-a-1/densenet121_50.pth' # resnet101_ibn_a_50 
+  NECK_FEAT: 'before'
+  FEAT_NORM: 'yes'
+  FLIP_FEATS: 'on'
+OUTPUT_DIR: "./log/1229-a-1/"
+TBOUTPUT_DIR: "/mnt/tensorboard"
+SAVE_FLAG: 'part'
+EVAL_START_EPOCH: 1
+EVAL_GT_PATH: './data/test/g_q.txt'

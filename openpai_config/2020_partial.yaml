@@ -1,0 +1,77 @@
+protocolVersion: 2
+name: zjf_train_val_resnet50_ibn_a_gradual_unlock
+type: job
+jobRetryCount: 0
+prerequisites:
+  - type: dockerimage
+    name: docker_image_0
+    uri: '192.168.231.192:5000/pytorch:py3-pytorch_1.6.0-10.2-cudnn7'
+taskRoles:
+  taskrole:
+    instances: 1
+    completion:
+      minFailedInstances: 1
+      minSucceededInstances: -1
+    taskRetryCount: 0
+    dockerImage: docker_image_0
+    resourcePerInstance:
+      memoryMB: 102400
+      gpu: 8
+      cpu: 32
+    commands:
+      - mkdir -p ~/.ssh
+      - echo "<% $secrets.SSH_PRIVATE_KEY %>" | tr -d '\r' > ~/.ssh/id_rsa
+      - cat ~/.ssh/id_rsa
+      - cp /mnt/nfs-storage/train_data/id_rsa ~/.ssh/
+      - chmod 700 ~/.ssh/id_rsa
+      - eval "$(ssh-agent -s)"
+      - ssh-add ~/.ssh/id_rsa
+      - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+      - mkdir -p /root/.cache/torch/checkpoints/
+      - >-
+        git clone
+        ssh://git@192.168.253.179:2222/icd/track_reid/naic2020_reid/naic_person_reid_dmt.git
+      - cd naic_person_reid_dmt
+      - git checkout DataParallel
+      - pip install yacs
+      - pip install torchcontrib
+      - pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
+      - python -m pip install tensorflow -i https://pypi.douban.com/simple
+      - pip install tensorboardX -i https://pypi.douban.com/simple
+      - pip install tensorboard -i  https://pypi.douban.com/simple
+      - pip install pretrainedmodels
+      - pip install h5py
+      - pip install metric_learn
+      - rm -rf log
+      - rm -rf data
+      - rm -rf ckpt
+      - mkdir log
+      - mkdir ckpt
+      - cp -rf /mnt/nfs-internstorage/user/zjf/models_zoo/REID/NAIC/* ./ckpt/
+      - cp -rf /mnt/nfs-internstorage/train_data/naic2020_evaldataset ./data
+      - bash run_sh_openpai_train_test.sh
+      - cp -rf ./log /mnt/nfs-internstorage/user/zjf/NAIC2020/new_train_val_resnet50_ibn_a_gradual_unlock
+      - cp -rf /mnt/tensorboard /mnt/nfs-internstorage/user/zjf/NAIC2020/new_train_val_resnet50_ibn_a_gradual_unlock
+defaults:
+  virtualCluster: default
+extras:
+  com.microsoft.pai.runtimeplugin:
+    - plugin: ssh
+      parameters:
+        jobssh: true
+        userssh: {}
+    - plugin: teamwise_storage
+      parameters:
+        storageConfigNames:
+          - nfs-internstorage
+          - nfs-storage
+    - plugin: tensorboard
+      parameters:
+        port: 13438
+        logdir:
+          path: /mnt/tensorboard
+  hivedScheduler:
+    taskRoles:
+      taskrole:
+        skuNum: 8
+        skuType: DT
