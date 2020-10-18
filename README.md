@@ -42,9 +42,10 @@ green image
 最终，在B榜采用的方案为上述三种方法的综合： 即加入2019数据集 + AutoAugment + PSO reranking, 模型存放在`./ckpt/resnet101_ibn_a.pth`, 使用的参数配置文件`./configs/naic_round2_model_a.yml`。
 
 ### 复现
-1.下载repo
+1.下载repo以及安装requirement
 ```
-git clone https://github.com/ZhuangLii/naic2020_reid
+git clone https://github.com/ZhuangLii/naic2020_reid.git
+pip install -r requirement.txt
 ```
 
 2.下载模型
