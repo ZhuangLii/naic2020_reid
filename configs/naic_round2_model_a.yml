@@ -6,8 +6,8 @@ MODEL:
   IF_WITH_CENTER: 'yes'
   NAME: 'resnet101_ibn_a' # resnet101_ibn_a
   FEAT_SIZE: 2048
-  DEVICE_ID: ('0,1,2,3,4,5,6,7')
-  ID_LOSS_TYPE: 'curricularface' # arcface circle curricularface
+  DEVICE_ID: ('0,1,2,3')
+  ID_LOSS_TYPE: 'arcface' # arcface circle curricularface
   ID_LOSS_WEIGHT: 0.1
   TRIPLET_LOSS_WEIGHT: 0.9
   WEIGHTED_TRIPLET: True
@@ -51,8 +51,8 @@ SOLVER:
   CHECKPOINT_PERIOD: 1
   LOG_PERIOD: 50
   EVAL_PERIOD: 10000
-  COSINE_MARGIN: 0.3 # 0.4
-  COSINE_SCALE: 20 # 30
+  COSINE_MARGIN: 0.4 # 0.4
+  COSINE_SCALE: 30 # 30
   CENTER_LOSS_WEIGHT: 0.0003
   FP16: False
   GRADCENTER: False
@@ -62,8 +62,10 @@ SOLVER:
   GRADUAL_UNLOCK: False
 
 TEST:
-  IMS_PER_BATCH: 512 # 512
-  RE_RANKING: False
+  IMS_PER_BATCH: 256 # 512
+  RE_RANKING: True
+  RE_RANKING_PARAMETER_GREEN: [9, 3, 0.7821]
+  RE_RANKING_PARAMETER_NORMAL: [17, 6, 0.7904]
   WEIGHT: './log/1229-a-1/resnet101_ibn_a_50.pth'
   NECK_FEAT: 'before'
   FEAT_NORM: 'yes'

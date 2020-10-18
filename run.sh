@@ -14,6 +14,6 @@ python test.py --config_file configs/naic_round2_model_a.yml
 
 # python test.py --config_file configs/naic_round2_model_se.yml
 
-echo evaluation
+# echo evaluation
 
 # python ./mics/eval.py
