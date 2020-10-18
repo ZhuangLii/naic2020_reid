@@ -41,7 +41,6 @@ taskRoles:
       - pip install pretrainedmodels
       - pip install h5py
       - pip install metric_learn
-      - pip install torchcontrib
       - rm -rf log
       - rm -rf data
       - rm -rf ckpt

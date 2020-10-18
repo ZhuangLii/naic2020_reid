@@ -8,6 +8,7 @@ naic 2020 AI+ 行人重识别项目
 使用 `./divided_dataset.py` 统计NAIC2020 reid的数据集，包括`train, test/gallery, test/query`中的green以及normal image 数量
 
 normal image
+
 ![green image](./pic/green.jpg)
 
 green image
@@ -41,12 +42,43 @@ green image
 最终，在B榜采用的方案为上述三种方法的综合： 即加入2019数据集 + AutoAugment + PSO reranking, 模型存放在`./ckpt/resnet101_ibn_a.pth`, 使用的参数配置文件`./configs/naic_round2_model_a.yml`。
 
 ### 复现
-训练model
+1.下载repo
 ```
-mv path/to/naic2019/train_dataset/images/*.png ./data/train/
-mv path/to/naic2020/train_dataset/images/*.png ./data/train/
-mv path/to/test/query/*.png ./data/test/query_a/
-mv path/to/test/gallery/*.png ./data/test/gallery_a/
+git clone https://github.com/ZhuangLii/naic2020_reid
+```
+
+2.下载模型
+
+百度云盘
+
+链接: https://pan.baidu.com/s/1vTDhroD66HeJ8AvBbyzwMw 提取码: 7p6y 
+
+md5码：bc2ace16845f002660350daff8d6e517
+
+将model放在 repo 的 `./ckpt` 文件夹下。
+
+3.处理数据
+```
+cd /path/to/naic2020/train_dataset/images/
+ls | awk '{print "mv "$1" 2020_"$1}' | sh
+mv *.png /path/to/repo/data/train/images
+cd /path/to/naic2019/train_dataset/images/
+ls | awk '{print "mv "$1" 2019_"$1}' | sh
+mv *.png /path/to/repo/data/train/images/
+mv /path/to/naic2020/test/query/*.png /path/to/data/test/query_a/
+mv /path/to/naic2020/test/gallery/*.png /path/to/data/test/gallery_a/
+cd /path/to/repo/
 mv ./mics/2019_2020_merge_label.txt ./data/train/label.txt
-python 
+```
+4. train + test 复现
+```
+sh run.sh
+```
+训练log位置`./log/train_log.txt`
+
+测试log位置`./log/test_log.txt`
+
+5. 仅 test 复现
+```
+sh run_sh_local.sh
 ```
