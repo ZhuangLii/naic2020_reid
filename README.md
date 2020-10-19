@@ -59,6 +59,19 @@ md5码：bc2ace16845f002660350daff8d6e517
 将model放在 repo 的 `./ckpt` 文件夹下。
 
 3.处理数据
+在repo下，建立如下结构的data文件夹
+```
+data
+|
+|-----train
+	|-------label.txt
+	|-------images
+|-----test
+	|-------gallery_a
+	|-------query_a
+```
+参考以下代码，将train-images folder中加入naic2019 和naic2020的train数据，2019数据为2019\_xxxxxx.png,
+2020数据为2020\_xxxxxx.png
 ```
 cd /path/to/naic2020/train_dataset/images/
 ls | awk '{print "mv "$1" 2020_"$1}' | sh
