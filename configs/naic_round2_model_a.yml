@@ -41,7 +41,7 @@ SOLVER:
   OPTIMIZER_NAME: 'Ranger' # 'Ranger, SGD'
   MAX_EPOCHS: 50 # 50
   BASE_LR: 0.006
-  IMS_PER_BATCH: 512 # 512
+  IMS_PER_BATCH: 256 # 512
   STEPS: [25, 40]
   GAMMA: 0.1
   WARMUP_FACTOR: 0.01
@@ -71,6 +71,6 @@ TEST:
   FEAT_NORM: 'yes'
   FLIP_FEATS: 'on'
 OUTPUT_DIR: "./log/1229-a-1/"
-TBOUTPUT_DIR: "/mnt/tensorboard"
+TBOUTPUT_DIR: "./tensorboard"
 SAVE_FLAG: '19_20_auto_a_ori_hard'
 EVAL_START_EPOCH: 1

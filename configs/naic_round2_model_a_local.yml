@@ -4,7 +4,7 @@ MODEL:
   METRIC_LOSS_TYPE: 'triplet_center'
   IF_LABELSMOOTH: 'on'
   IF_WITH_CENTER: 'yes'
-  NAME: 'resnet50_ibn_a'
+  NAME: 'resnet101_ibn_a'
   FEAT_SIZE: 2048
   DEVICE_ID: ('0')
   ID_LOSS_TYPE: 'arcface'
@@ -29,7 +29,7 @@ DATASETS:
   # ROOT_DIR: ('../data/naic_2020_B')
   # ROOT_DIR: ('../data/naic2020_evaldataset')
   # ROOT_DIR: '../data/19_20_train_20_test'
-  ROOT_DIR: ('../data/tmp_data')
+  ROOT_DIR: ('./data')
   TEST_DIR: 'test' 
   HARD_AUG: 'auto'
   EXCHANEL: False
@@ -61,16 +61,16 @@ SOLVER:
   FP16: False
   GRADCENTER: False
   TYPE: 'exp'
-  SWA: True
+  SWA: False
   SWA_START: [5,10]
   GRADUAL_UNLOCK: False
 
 TEST:
   IMS_PER_BATCH: 256
-  RE_RANKING: False
+  RE_RANKING: True
   RE_RANKING_PARAMETER_GREEN: [9, 3, 0.7821] #[9, 3, 0.7821]
   RE_RANKING_PARAMETER_NORMAL: [17, 6, 0.7904] #[17, 6, 0.7904]
-  WEIGHT: './ckpt/resnet101_ibn_a.pth' #'/mnt/nfs-internstorage/user/zjf/NAIC2020/19_20__curricularface_m05s40/1229-a-1/resnet101_ibn_a_50.pth' # '/mnt/nfs-internstorage/user/zjf/NAIC2020/new_val_a_auto_curricularface_m05s40/1229-a-1/resnet101_ibn_a_30.pth'
+  WEIGHT: './ckpt/resnet101_ibn_a_50.pth' #'/mnt/nfs-internstorage/user/zjf/NAIC2020/19_20__curricularface_m05s40/1229-a-1/resnet101_ibn_a_50.pth' # '/mnt/nfs-internstorage/user/zjf/NAIC2020/new_val_a_auto_curricularface_m05s40/1229-a-1/resnet101_ibn_a_30.pth'
   NECK_FEAT: 'before'
   FEAT_NORM: 'yes'
   FLIP_FEATS: 'on'

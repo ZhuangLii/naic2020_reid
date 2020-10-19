@@ -56,7 +56,11 @@ pip install -r requirement.txt
 
 md5码：bc2ace16845f002660350daff8d6e517
 
-将model放在 repo 的 `./ckpt` 文件夹下。
+链接: https://pan.baidu.com/s/1-Rya\_lTaGrTgMbTxA4Vr6w 提取码: pb6c
+
+md5码：04dfefbc4f0b6955fac932b85e13d9f1
+
+将两个 model放在 repo 的 `./ckpt` 文件夹下。
 
 3.处理数据
 在repo下，建立如下结构的data文件夹

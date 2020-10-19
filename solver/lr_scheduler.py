@@ -40,7 +40,7 @@ class WarmupMultiStepLR(torch.optim.lr_scheduler._LRScheduler):
         self.warmup_method = warmup_method
         super(WarmupMultiStepLR, self).__init__(optimizer, last_epoch)
 
-    def get_last_lr(self):
+    def get_lr(self):
         warmup_factor = 1
         if self.last_epoch < self.warmup_iters:
             if self.warmup_method == "constant":
